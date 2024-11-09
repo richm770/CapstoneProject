@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StudentSignupRequest {
-
+public class StudentSignupRequest extends SignupRequest{
+    
     private String studentID;
 
 }

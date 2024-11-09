@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Faculty Sign Up</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .signup-container {
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 0px;
+        }
+        .signup-form {
+            background-color: #ffffff;
+            padding: 20px;
+            padding-right: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: calc(100% - 20px);
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 50%
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+        hr {
+            width: 50%;
+        }
+        .login-link {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .login-link a {
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="signup-container">
+    <h1>Project Approval System - Faculty Signup</h1>
+    <hr>
+    <form th:action="@{/auth/faculty-signup}" method="post" class="signup-form">
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" required/>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password" required/>
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" required/>
+        </div>
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" name="firstName" id="firstName" required/>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" name="lastName" id="lastName" required/>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" name="phone" id="phone" required/>
+        </div>
+        <div class="form-group">
+            <label for="department">Department</label>
+            <select name="department" id="department" required>
+                <option value="" disabled selected>Select Department</option>
+                <option th:each="department : ${T(com.example.backend.model.Department).values()}"
+                        th:value="${department}" th:text="${department}">Department</option>
+            </select>
+        </div>
+        <div class="form-group" style="align-items: center">
+            <input type="submit" value="Sign Up"/>
+        </div>
+        <div class="login-link">
+            <a th:href="@{/auth/login}">Already have an account? Log in</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

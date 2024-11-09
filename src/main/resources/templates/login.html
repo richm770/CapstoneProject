@@ -3,25 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome Page</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Background color */
+        }
+        .login-container {
+            text-align: center;
+        }
+        h1 { /* This allows the hr to be close to title */
+            margin-bottom: 0px;
+        }
+        .login-form {
+            background-color: #ffffff; /* Form background color */
+            padding: 20px;
+            padding-right: 40px; /* Added extra space to the right */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left; /* Ensure content within the form is left-aligned */
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align fields to the start of flex container */
+            margin-bottom: 20px;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="submit"] {
+            width: calc(100% - 20px); /* Adjust width to provide consistent form padding */
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 50%
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: red;
+            margin-bottom: 20px;
+        }
+        hr {
+            width: 50%;
+        }
+        .sign-up-link {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .sign-up-link a {
+            text-decoration: none;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .sign-up-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-<h1>Please Log In</h1>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
-</div>
-<form th:action="@{/auth/login}" method="post">
-    <div>
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username"/>
+<div class="login-container">
+    <h1>Project Approval System</h1>
+    <hr>
+    <div th:if="${param.error}" class="error-message">
+        Invalid username or password.
     </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password"/>
+    <div th:if="${param.logout}" class="error-message">
+        You have been logged out.
     </div>
-    <input type="submit" value="Log in"/>
-</form>
+    <form th:action="@{/auth/login}" method="post" class="login-form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username"/>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password"/>
+        </div>
+        <div class="form-group" style="align-items: center"> <!-- Center the button within this group -->
+            <input type="submit" value="Log in"/>
+        </div>
+        <div class="sign-up-link">
+            <a th:href="@{/auth/student-signup}">Student Sign up</a>
+        </div>
+        <div class="sign-up-link">
+            <a th:href="@{/auth/faculty-signup}">Faculty Sign up</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FacultySignupRequest {
+public class FacultySignupRequest extends SignupRequest {
 
     private Department department;
 
