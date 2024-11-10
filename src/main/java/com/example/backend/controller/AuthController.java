@@ -41,7 +41,7 @@ public class AuthController {
             return "student-signup";
         }
         authService.registerStudent(signupRequest);
-        return "redirect:dashboard";
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/faculty-signup")

@@ -5,6 +5,7 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <h1>Dashboard</h1>
+<h1>Welcome, <span th:text="${user.get().getFirstName()}">User</span>!</h1>
+<a href="/auth/logout">Logout</a>
 </body>
 </html>
