@@ -32,58 +32,58 @@ public class TestDataConfig {
         return args -> {
 
             // Check if example student account already exists. If so, delete it.
-            Optional<Student> existingStudent = studentRepository.findByEmail("student@example.com");
-            existingStudent.ifPresent(studentRepository::delete);
-
-            // Set example student info
-            Student student = new Student();
-            student.setFirstName("John");
-            student.setLastName("Doe");
-            student.setEmail("student@example.com");
-            student.setPassword(passwordEncoder.encode("password"));
-            student.setStudentID("1333567");
-            student.setPhone("888-888-8888");
-
-            // Set example student authority
-            Authority authority = new Authority();
-            authority.setAuthority("STUDENT");
-            authority.setUser(student);
-
-            Set<Authority> authorities = student.getUserAuthorities();
-            authorities.add(authority);
-
-            student.setUserAuthorities(authorities);
-            studentRepository.save(student);
+//            Optional<Student> existingStudent = studentRepository.findByEmail("student@example.com");
+//            existingStudent.ifPresent(studentRepository::delete);
+//
+//            // Set example student info
+//            Student student = new Student();
+//            student.setFirstName("John");
+//            student.setLastName("Doe");
+//            student.setEmail("student@example.com");
+//            student.setPassword(passwordEncoder.encode("password"));
+//            student.setStudentID("1333567");
+//            student.setPhone("888-888-8888");
+//
+//            // Set example student authority
+//            Authority authority = new Authority();
+//            authority.setAuthority("STUDENT");
+//            authority.setUser(student);
+//
+//            Set<Authority> authorities = student.getUserAuthorities();
+//            authorities.add(authority);
+//
+//            student.setUserAuthorities(authorities);
+//            studentRepository.save(student);
         };
     }
 
     @Bean
     public CommandLineRunner insertTestFaculty() {
         return args -> {
-
-            // Check if example faculty account already exists. If so, delete it.
-            Optional<Faculty> existingFaculty = facultyRepository.findByEmail("faculty@example.com");
-            existingFaculty.ifPresent(facultyRepository::delete);
-
-            // Set example faculty info
-            Faculty faculty = new Faculty();
-            faculty.setFirstName("John");
-            faculty.setLastName("Doe");
-            faculty.setEmail("faculty@example.com");
-            faculty.setPassword(passwordEncoder.encode("password"));
-            faculty.setPhone("888-888-8888");
-            faculty.setDepartment(Department.ADMISSIONS);
-
-            // Set example faculty authority
-            Authority authority = new Authority();
-            authority.setAuthority("FACULTY");
-            authority.setUser(faculty);
-
-            Set<Authority> authorities = faculty.getUserAuthorities();
-            authorities.add(authority);
-
-            faculty.setUserAuthorities(authorities);
-            facultyRepository.save(faculty);
+//
+//            // Check if example faculty account already exists. If so, delete it.
+//            Optional<Faculty> existingFaculty = facultyRepository.findByEmail("faculty@example.com");
+//            existingFaculty.ifPresent(facultyRepository::delete);
+//
+//            // Set example faculty info
+//            Faculty faculty = new Faculty();
+//            faculty.setFirstName("John");
+//            faculty.setLastName("Doe");
+//            faculty.setEmail("faculty@example.com");
+//            faculty.setPassword(passwordEncoder.encode("password"));
+//            faculty.setPhone("888-888-8888");
+//            faculty.setDepartment(Department.STUDENT_AFFAIRS);
+//
+//            // Set example faculty authority
+//            Authority authority = new Authority();
+//            authority.setAuthority("FACULTY");
+//            authority.setUser(faculty);
+//
+//            Set<Authority> authorities = faculty.getUserAuthorities();
+//            authorities.add(authority);
+//
+//            faculty.setUserAuthorities(authorities);
+//            facultyRepository.save(faculty);
         };
     }
 }

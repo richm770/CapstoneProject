@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/main-layout :: common_header(~{::title}, _)">
+    <title>Housing Request Form</title>
+</head>
+<body th:replace="layouts/main-layout :: common_body(~{::mainContent}, _, _)">
+<div th:fragment="mainContent">
+    <div class="container text-center w-50">
+        <h1 class="mb-5">Student Housing Request Form</h1>
+        <form th:action="@{/request/housingRequest}" th:object="${createHousingRequest}" method="post">
+            <div class="row mb-3">
+                <label for="housingType" class="col-sm-3 col-form-label">Housing Type</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" th:classappend="${housingTypeError} ? 'is-invalid'" th:field="*{housingType}" id="housingType">
+                    <div class="invalid-feedback" th:if="${housingTypeError}" th:text="${housingTypeError}"></div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="duration" class="col-sm-3 col-form-label">Duration</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" th:classappend="${durationError} ? 'is-invalid'" th:field="*{duration}" id="duration">
+                    <div class="invalid-feedback" th:if="${durationError}" th:text="${durationError}"></div>
+                </div>
+            </div>
+            <div class="row mb-5">
+                <label for="reason" class="col-sm-3 col-form-label">Reason</label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" th:field="*{reason}" id="reason"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-25">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

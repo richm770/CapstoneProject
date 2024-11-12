@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Sidebar Fragment</title>
+</head>
+<body>
+<div th:fragment="sidebar" class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark fixed-sidebar">
+    <p class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span class="fs-5">Request Approval System</span>
+    </p>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li>
+            <a href="/dashboard" class="nav-link text-white" th:classappend="${activePage == 'dashboard'} ? 'active'">
+                <i class="bi bi-house-door pe-none me-2"></i>
+                Dashboard
+            </a>
+        </li>
+        <li>
+            <hr>
+        </li>
+        <li sec:authorize="hasAuthority('STUDENT')">
+            <a href="/request/leaveRequest" class="nav-link text-white"
+               th:classappend="${activePage == 'leaveRequest'} ? 'active'">
+                <i class="bi bi-file-earmark-medical pe-none me-2"></i>
+                Leave of Absence Form
+            </a>
+        </li>
+        <li sec:authorize="hasAuthority('STUDENT')">
+            <a href="/request/housingRequest" class="nav-link text-white"
+               th:classappend="${activePage == 'housingRequest'} ? 'active'">
+                <i class="bi bi-buildings pe-none me-2"></i>
+                Student Housing Form
+            </a>
+        </li>
+        <li sec:authorize="hasAuthority('STUDENT')">
+            <a href="/request/courseRegistrationRequest" class="nav-link text-white"
+               th:classappend="${activePage == 'courseRegistrationRequest'} ? 'active'">
+                <i class="bi bi-book pe-none me-2"></i>
+                Course Registration Form
+            </a>
+        </li>
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle pe-none me-2"></i>
+            <strong th:text="${user.getFirstName() + ' ' + user.getLastName()}"></strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+            <li>
+                <form th:action="@{/auth/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="dropdown-item">
+                        Sign out
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
