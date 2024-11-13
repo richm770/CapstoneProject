@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/student")
 public class StudentController {
 
+    /**
+     * This method returns the student.html page
+     *
+     * @return student.html
+     */
     @GetMapping
     public String student() {
         return "student";

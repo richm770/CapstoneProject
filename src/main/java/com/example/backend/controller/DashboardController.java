@@ -22,17 +22,29 @@ public class DashboardController {
     private final UserRepository userRepository;
     private final RequestService requestService;
 
+    /***
+     * Constructor for the dashboard controller
+     * @param userRepository The user repository
+     * @param requestService The request service
+     */
     public DashboardController(UserRepository userRepository, RequestService requestService) {
         this.userRepository = userRepository;
         this.requestService = requestService;
     }
 
+    /***
+     * Expose the dashboard page
+     * @param principal The principal
+     * @param model The model
+     * @return The dashboard page
+     */
     @GetMapping
     public String dashboard(Principal principal, Model model) {
         String userEmail = principal.getName();
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
         model.addAttribute("user", user);
 
+        // If the user is a faculty member, get the department they are assigned to
         if (user instanceof Faculty faculty) {
             Department assignedDepartment = faculty.getDepartment();
 
@@ -40,6 +52,7 @@ public class DashboardController {
             List<StudentHousingRequest> housingRequests = new ArrayList<>();
             List<LeaveOfAbsenceRequest> leaveRequests = new ArrayList<>();
 
+            // Get all requests for the faculty member's department
             List<Request> requests = requestService.getFacultyRequests(userEmail, assignedDepartment);
             requests.forEach(request -> {
                 if (request instanceof CourseRegistrationRequest) {
@@ -56,6 +69,8 @@ public class DashboardController {
             model.addAttribute("leaveRequests", leaveRequests);
 
             log.info(leaveRequests.toString());
+
+            // If the user is a student, get all of their requests
         } else {
             List<CourseRegistrationRequest> courseRequests = requestService.getCourseRegistrationRequests(userEmail);
             model.addAttribute("courseRequests", courseRequests);

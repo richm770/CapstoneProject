@@ -13,6 +13,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /***
+     * This method is used to load the user by username.
+     * @param username name of user
+     * @return UserDetails
+     * @throws UsernameNotFoundException if user not found
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)

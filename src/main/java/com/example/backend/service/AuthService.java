@@ -19,6 +19,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    /***
+     * Constructor
+     * @param studentRepository: StudentRepository object
+     * @param facultyRepository: FacultyRepository object
+     * @param passwordEncoder: PasswordEncoder object
+     * @param userRepository: UserRepository object
+     */
     public AuthService(StudentRepository studentRepository, FacultyRepository facultyRepository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
@@ -26,6 +33,10 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
+    /***
+     * This method is used to register a student
+     * @param signupRequest: StudentSignupRequest object
+     */
     public void registerStudent(StudentSignupRequest signupRequest) {
         Student student = new Student();
         student.setEmail(signupRequest.getEmail());
@@ -46,6 +57,10 @@ public class AuthService {
         studentRepository.save(student);
     }
 
+    /***
+     * This method is used to register a faculty
+     * @param signupRequest: FacultySignupRequest object
+     */
     public void registerFaculty(FacultySignupRequest signupRequest) {
         Faculty faculty = new Faculty();
         faculty.setEmail(signupRequest.getEmail());
@@ -66,6 +81,11 @@ public class AuthService {
         facultyRepository.save(faculty);
     }
 
+    /***
+     * This method is used to get the user by principal
+     * @param principal: Principal object
+     * @return User object
+     */
     public User getUserByPrincipal(Principal principal) {
         String userEmail = principal.getName();
         return userRepository.findByEmail(userEmail)

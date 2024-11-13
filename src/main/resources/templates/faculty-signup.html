@@ -84,6 +84,9 @@
 <div class="signup-container">
     <h1>Project Approval System - Faculty Signup</h1>
     <hr>
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
     <form th:action="@{/auth/faculty-signup}" method="post" class="signup-form">
         <div class="form-group">
             <label for="email">Email</label>
