@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layouts/main-layout :: common_header(~{::title}, _)">
+    <title>Request</title>
+</head>
+<body th:replace="layouts/main-layout :: common_body(~{::mainContent}, _, _)">
+<div th:fragment="mainContent">
+    <div class="container-fluid">
+        <div class="col-md-6 mb-4" th:if="${request instanceof T(com.example.backend.model.LeaveOfAbsenceRequest)}">
+            <div class="card">
+                <div class="d-flex card-header">
+                    <h5 class="card-title">Leave of Absence Request Details</h5>
+                    <span class="ms-3 d-flex align-items-center badge" th:classappend="${request.status == 'approved' ? 'bg-success' :
+                                  request.status == 'withdrawn' ? 'bg-warning text-dark' :
+                                  request.status == 'rejected' ? 'bg-danger' :
+                                  'bg-secondary'}"
+                          th:text="${request.status}"></span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Request Type:</strong> Leave of Absence</p>
+                    <p><strong>Start Date:</strong> <span
+                            th:text="${#temporals.format(request.startDate, 'MMM dd, yyyy')}"></span></p>
+                    <p><strong>End Date:</strong> <span
+                            th:text="${#temporals.format(request.endDate, 'MMM dd, yyyy')}"></span>
+                    </p>
+                    <p><strong>Reason:</strong></p>
+                    <p th:text="${request.reason}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4" th:if="${request instanceof T(com.example.backend.model.StudentHousingRequest)}">
+            <div class="card">
+                <div class="d-flex card-header">
+                    <h5 class="card-title">Student Housing Request Details</h5>
+                    <span class="ms-3 d-flex align-items-center badge" th:classappend="${request.status == 'approved' ? 'bg-success' :
+                                  request.status == 'withdrawn' ? 'bg-warning text-dark' :
+                                  request.status == 'rejected' ? 'bg-danger' :
+                                  'bg-secondary'}"
+                          th:text="${request.status}"></span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Request Type:</strong> Student Housing</p>
+                    <p><strong>Housing Type:</strong> <span th:text="${request.housingType}"></span></p>
+                    <p><strong>Duration:</strong> <span th:text="${request.duration}"></span></p>
+                    <p><strong>Reason:</strong></p>
+                    <p th:text="${request.reason}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4" th:if="${request instanceof T(com.example.backend.model.CourseRegistrationRequest)}">
+            <div class="card">
+                <div class="d-flex card-header">
+                    <h5 class="card-title">Course Registration Request Details</h5>
+                    <span class="ms-3 d-flex align-items-center badge" th:classappend="${request.status == 'approved' ? 'bg-success' :
+                                  request.status == 'withdrawn' ? 'bg-warning text-dark' :
+                                  request.status == 'rejected' ? 'bg-danger' :
+                                  'bg-secondary'}"
+                          th:text="${request.status}"></span>
+                </div>
+                <div class="card-body">
+                    <p><strong>Request Type:</strong> Course Registration</p>
+                    <p><strong>Course ID:</strong> <span th:text="${request.courseId}"></span></p>
+                    <p><strong>Semester:</strong> <span th:text="${request.semester}"></span></p>
+                    <p><strong>Reason:</strong></p>
+                    <p th:text="${request.reason}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Comments</h5>
+                </div>
+                <div class="card-body">
+                    <div th:each="comment, commentStat : ${request.comments}">
+                        <p><strong th:text="${comment.user.getFirstName() + ' ' + comment.user.getLastName()}"></strong>
+                            - <span
+                                    th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+                        <p th:text="${comment.text}" th:classappend="${commentStat.last} ? 'mb-1'"></p>
+                        <hr th:if="${!commentStat.last}">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <form th:action="@{/request/comment}" th:object="${newComment}" method="post">
+                        <input type="hidden" name="requestId" th:value="${request.id}">
+                        <div class="mb-3">
+                        <textarea th:field="*{text}" class="form-control" name="commentText" rows="2"
+                                  placeholder="Add a comment..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Submit Comment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${(user instanceof T(com.example.backend.model.Student)
+                    and request.status != 'withdrawn')
+                    or (user instanceof T(com.example.backend.model.Faculty)
+                    and (request.status != 'approved' and request.status != 'rejected'))}" class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${user instanceof T(com.example.backend.model.Student) and request.status != 'withdrawn'}">
+                        <form th:action="@{/request/withdraw}" method="post" class="d-inline">
+                            <input type="hidden" name="requestId" th:value="${request.id}">
+                            <button type="submit" class="btn btn-danger">Withdraw Request</button>
+                        </form>
+                    </div>
+                    <div th:if="${user instanceof T(com.example.backend.model.Faculty)}" class="d-flex">
+                        <div th:if="${request.status != 'approved'}">
+                            <form th:action="@{/request/approve}" method="post" class="d-inline">
+                                <input type="hidden" name="requestId" th:value="${request.id}">
+                                <button type="submit" class="btn btn-success">Approve Request</button>
+                            </form>
+                        </div>
+                        <div th:if="${request.status != 'rejected'}" class="ms-4">
+                            <form th:action="@{/request/reject}" method="post" class="d-inline">
+                                <input type="hidden" name="requestId" th:value="${request.id}">
+                                <button type="submit" class="btn btn-danger">Reject Request</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

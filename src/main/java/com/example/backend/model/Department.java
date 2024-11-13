@@ -1,5 +1,5 @@
 package com.example.backend.model;
 
 public enum Department {
-    ADMISSIONS, FINANCE, VETERAN
+    REGISTRARS_OFFICE, STUDENT_AFFAIRS, HOUSING_OFFICE
 }

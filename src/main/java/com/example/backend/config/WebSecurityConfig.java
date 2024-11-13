@@ -4,6 +4,7 @@ import com.example.backend.repository.UserRepository;
 import com.example.backend.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,18 +18,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    @Bean("1")
+    @Bean
+    @Order(1)
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login", "/error", "/auth/student-signup", "/auth/faculty-signup", "/h2-console/**").permitAll()
-                        .requestMatchers("/student/**").hasAuthority("STUDENT")
+                        .requestMatchers("/auth/login", "/error", "/auth/student-signup", "/auth/faculty-signup").permitAll()
+                        .requestMatchers("/request/leaveRequest", "/request/courseRegistrationRequest", "/request/housingRequest").hasAuthority("STUDENT")
                         .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable)
-                .headers(headers ->
-                        headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
+                .csrf(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(Customizer.withDefaults())
                 .formLogin(form -> form

@@ -1,11 +1,78 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layouts/main-layout :: common_header(~{::title}, ~{})}">
     <title>Dashboard</title>
 </head>
-<body>
-<h1>Welcome, <span th:text="${user.get().getFirstName()}">User</span>!</h1>
-<a href="/auth/logout">Logout</a>
+<style>
+    main {
+        min-height: 100vh;
+    }
+</style>
+<body th:replace="~{layouts/main-layout :: common_body(~{::mainContent}, _, _)}">
+<div th:fragment="mainContent">
+    <div class="col text-center">
+        <div th:if="${user instanceof T(com.example.backend.model.Student)
+                    or (user instanceof T(com.example.backend.model.Faculty)
+                    and user.getDepartment() == T(com.example.backend.model.Department).STUDENT_AFFAIRS)}" class="d-flex justify-content-center row">
+            <h1>Leave of Absence Requests</h1>
+            <div class="col-auto gy-3" th:each="request : ${leaveRequests}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${request.id}"></h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary" th:text="${request.status}"></h6>
+                        <h6 sec:authorize="hasAuthority('FACULTY')" class="card-subtitle mb-2 text-body-secondary"
+                            th:text="${request.getCreatedBy().getFirstName() + ' ' + request.getCreatedBy().getLastName()}"></h6>
+                        <p class="card-text" th:text="${#temporals.format(request.startDate, 'MMM dd, yyyy')}"></p>
+                        <p class="card-text" th:text="${#temporals.format(request.endDate, 'MMM dd, yyyy')}"></p>
+                        <p class="card-text" th:text="${request.reason}"></p>
+                        <a th:href="@{/request/{requestId}(requestId=${request.id})}" class="btn btn-primary">View Request</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${user instanceof T(com.example.backend.model.Student)
+                    or (user instanceof T(com.example.backend.model.Faculty)
+                    and user.getDepartment() == T(com.example.backend.model.Department).REGISTRARS_OFFICE)}"
+             class="d-flex justify-content-center row my-4">
+            <h1>Course Registration Requests</h1>
+            <div class="col-auto gy-3" th:each="request : ${courseRequests}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${request.id}"></h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary" th:text="${request.status}"></h6>
+                        <h6 sec:authorize="hasAuthority('FACULTY')" class="card-subtitle mb-2 text-body-secondary"
+                            th:text="${request.getCreatedBy().getFirstName() + ' ' + request.getCreatedBy().getLastName()}"></h6>
+                        <p class="card-text" th:text="${request.courseId}"></p>
+                        <p class="card-text" th:text="${request.semester}"></p>
+                        <p class="card-text" th:text="${request.reason}"></p>
+                        <a th:href="@{/request/{requestId}(requestId=${request.id})}" class="btn btn-primary">View Request</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${user instanceof T(com.example.backend.model.Student)
+                    or (user instanceof T(com.example.backend.model.Faculty)
+                    and user.getDepartment() == T(com.example.backend.model.Department).HOUSING_OFFICE)}"
+             class="d-flex justify-content-center row my-4">
+            <h1>Student Housing Requests</h1>
+            <div class="col-auto gy-3" th:each="request : ${housingRequests}">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${request.id}"></h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary" th:text="${request.status}"></h6>
+                        <h6 sec:authorize="hasAuthority('FACULTY')" class="card-subtitle mb-2 text-body-secondary"
+                            th:text="${request.getCreatedBy().getFirstName() + ' ' + request.getCreatedBy().getLastName()}"></h6>
+                        <p class="card-text" th:text="${request.housingType}"></p>
+                        <p class="card-text" th:text="${request.duration}"></p>
+                        <p class="card-text" th:text="${request.reason}"></p>
+                        <a th:href="@{/request/{requestId}(requestId=${request.id})}" class="btn btn-primary">View Request</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
