@@ -54,6 +54,10 @@ public class RequestController {
 
         Request request = requestRepository.getRequestById(requestId);
 
+        if (request == null) {
+            return "redirect:/request/" + requestId;
+        }
+
         comment.setRequest(request);
         User user = authService.getUserByPrincipal(principal);
         comment.setUser(user);
@@ -64,9 +68,20 @@ public class RequestController {
     }
 
     @PostMapping("/withdraw")
-    public String withdrawRequest(@RequestParam("requestId") Integer requestId) {
+    public String withdrawRequest(@RequestParam("requestId") Integer requestId,
+                                  Principal principal) {
+
+        User user = authService.getUserByPrincipal(principal);
+        if (user instanceof Faculty) {
+            return "redirect:/request/" + requestId + "?error=unauthorized";
+        }
 
         Request request = requestRepository.getRequestById(requestId);
+
+        if (request == null) {
+            return "redirect:/request/" + requestId;
+        }
+
         request.setStatus("withdrawn");
         requestRepository.save(request);
 
@@ -74,9 +89,20 @@ public class RequestController {
     }
 
     @PostMapping("/approve")
-    public String approveRequest(@RequestParam("requestId") Integer requestId) {
+    public String approveRequest(@RequestParam("requestId") Integer requestId,
+                                 Principal principal) {
+
+        User user = authService.getUserByPrincipal(principal);
+        if (user instanceof Student) {
+            return "redirect:/request/" + requestId + "?error=unauthorized";
+        }
 
         Request request = requestRepository.getRequestById(requestId);
+
+        if (request == null) {
+            return "redirect:/request/" + requestId;
+        }
+
         request.setStatus("approved");
         requestRepository.save(request);
 
@@ -84,9 +110,20 @@ public class RequestController {
     }
 
     @PostMapping("/reject")
-    public String rejectRequest(@RequestParam("requestId") Integer requestId) {
+    public String rejectRequest(@RequestParam("requestId") Integer requestId,
+                                Principal principal) {
+
+        User user = authService.getUserByPrincipal(principal);
+        if (user instanceof Student) {
+            return "redirect:/request/" + requestId + "?error=unauthorized";
+        }
 
         Request request = requestRepository.getRequestById(requestId);
+
+        if (request == null) {
+            return "redirect:/request/" + requestId;
+        }
+
         request.setStatus("rejected");
         requestRepository.save(request);
 
