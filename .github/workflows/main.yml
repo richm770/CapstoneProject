@@ -50,7 +50,7 @@ jobs:
             SECRET=$(aws secretsmanager get-secret-value --secret-id ${{ secrets.DB_SECRETS_ID }} --query SecretString --output text)
             DB_USERNAME=$(echo $SECRET | jq -r '.username')
             DB_PASSWORD=$(echo $SECRET | jq -r '.password')
-            DB_URL=jdbc:postgres://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
+            DB_URL=jdbc:postgresql://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
   
             # Stop and remove the existing Docker container
             echo "Stopping and removing existing Docker container..."
