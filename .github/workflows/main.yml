@@ -28,10 +28,14 @@ jobs:
     steps:
       - name: Set up SSH
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H "${{ secrets.EC2_PUBLIC_IP }}" >> ~/.ssh/known_hosts
+          set -x  # Enable debug mode
+          mkdir -p ~/.ssh  # Ensure the .ssh directory exists
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa  # Write the private key
+          chmod 600 ~/.ssh/id_rsa  # Set permissions for the private key
+          cat ~/.ssh/id_rsa  # Debug: Print the private key (check format, will be redacted in logs)
+          ssh-keyscan -H "${{ secrets.EC2_PUBLIC_IP }}" >> ~/.ssh/known_hosts || echo "ssh-keyscan failed"  # Add host key to known_hosts
+          cat ~/.ssh/known_hosts  # Debug: Print known_hosts to verify the host key is added
+        shell: bash
 
       - name: Deploy to EC2
         run: |
