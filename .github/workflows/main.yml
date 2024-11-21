@@ -7,35 +7,31 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # build:
-  #   runs-on: self-hosted
-  #   steps:
-  #     - name: Login to Docker Hub
-  #       uses: docker/login-action@v3
-  #       with:
-  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
-  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       
-  #     - name: Build Docker Image and Push to Docker Hub
-  #       uses: docker/build-push-action@v6
-  #       with:
-  #         push: true
-  #         tags: ${{ secrets.DOCKERHUB_USERNAME }}/requestapprovalsystem:latest
+      - name: Build Docker Image and Push to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/requestapprovalsystem:latest
           
   deploy:
     runs-on: self-hosted
-    # needs: build
+    needs: build
     steps:
       - name: Set up SSH
         run: |
-          set -x  # Enable debug mode
-          mkdir -p ~/.ssh  # Ensure the .ssh directory exists
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa  # Write the private key
-          chmod 600 ~/.ssh/id_rsa  # Set permissions for the private key
-          cat ~/.ssh/id_rsa  # Debug: Print the private key (check format, will be redacted in logs)
-          ssh-keyscan -H "${{ secrets.EC2_PUBLIC_IP }}" >> ~/.ssh/known_hosts || echo "ssh-keyscan failed"  # Add host key to known_hosts
-          cat ~/.ssh/known_hosts  # Debug: Print known_hosts to verify the host key is added
-        shell: bash
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.EC2_PUBLIC_IP }}" >> ~/.ssh/known_hosts || echo "ssh-keyscan failed"
 
       - name: Deploy to EC2
         run: |
