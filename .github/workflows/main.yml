@@ -27,6 +27,7 @@ jobs:
     steps:
       - name: Set up SSH
         run: |
+          set -x
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
