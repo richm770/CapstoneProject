@@ -19,8 +19,6 @@ jobs:
       - name: Build Docker Image and Push to Docker Hub
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/requestapprovalsystem:latest
           
