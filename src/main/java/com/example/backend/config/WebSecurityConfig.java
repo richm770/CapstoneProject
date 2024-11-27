@@ -14,10 +14,20 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+/***
+ * The web security configuration class
+ * This class configures the security settings for the application
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    /***
+     * The filter chain for the security configuration
+     * @param http The http security
+     * @return The security filter chain
+     * @throws Exception If an exception occurs
+     */
     @Bean
     @Order(1)
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,11 +54,20 @@ public class WebSecurityConfig {
         return http.build();
     }
 
+    /***
+     * The custom user details service
+     * @param userRepository The user repository
+     * @return The custom user details service
+     */
     @Bean
     CustomUserDetailsService customUserDetailsService(UserRepository userRepository) {
         return new CustomUserDetailsService(userRepository);
     }
 
+    /***
+     * The password encoder
+     * @return The password encoder
+     */
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

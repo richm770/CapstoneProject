@@ -19,6 +19,9 @@ import java.security.Principal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+/***
+ * Test the RequestController class
+ */
 @ExtendWith(MockitoExtension.class)
 public class RequestControllerTest {
 
@@ -39,6 +42,9 @@ public class RequestControllerTest {
     private Student student;
     private Faculty faculty;
 
+    /***
+     * Set up the test environment
+     */
     @BeforeEach
     void setUp() {
         principal = mock(Principal.class);
@@ -48,6 +54,10 @@ public class RequestControllerTest {
         request.setId(1);
     }
 
+    /***
+     * Test the createComment method
+     * Test that the method creates a comment successfully
+     */
     @Test
     void testCreateComment_success() {
         // Given
@@ -67,6 +77,10 @@ public class RequestControllerTest {
         assertEquals(student, comment.getUser());
     }
 
+    /***
+     * Test the createComment method
+     * Test that the method redirects to the request page when the request is not found
+     */
     @Test
     void testCreateComment_requestNotFound() {
         Integer requestId = 1;
@@ -80,6 +94,10 @@ public class RequestControllerTest {
         verify(commentRepository, never()).save(comment);
     }
 
+    /***
+     * Test the createComment method
+     * Test that the method redirects to the request page when the user is not a student
+     */
     @Test
     void testWithdrawRequest_success() {
         Integer requestId = 1;
@@ -95,6 +113,10 @@ public class RequestControllerTest {
         assertEquals("withdrawn", request.getStatus());
     }
 
+    /***
+     * Test the withdrawRequest method
+     * Test that the method withdraws a request successfully
+     */
     @Test
     void testWithdrawRequest_requestNotFound() {
         Integer requestId = 1;
@@ -108,6 +130,10 @@ public class RequestControllerTest {
         verify(requestRepository, never()).save(any(Request.class));
     }
 
+    /***
+     * Test the withdrawRequest method
+     * Test that the method redirects to the request page when the user is not a student
+     */
     @Test
     void testFacultyCannotWithdrawRequest() {
         Integer requestId = 1;
@@ -120,6 +146,10 @@ public class RequestControllerTest {
         verify(requestRepository, never()).save(any(Request.class));
     }
 
+    /***
+     * Test the approveRequest method
+     * Test that the method approves a request successfully
+     */
     @Test
     void testApproveRequest_success() {
         Integer requestId = 1;
@@ -135,6 +165,10 @@ public class RequestControllerTest {
         assertEquals("approved", request.getStatus());
     }
 
+    /***
+     * Test the approveRequest method
+     * Test that the method redirects to the request page when the request is not found
+     */
     @Test
     void testApproveRequest_requestNotFound() {
         Integer requestId = 1;
@@ -148,6 +182,10 @@ public class RequestControllerTest {
         verify(requestRepository, never()).save(any(Request.class));
     }
 
+    /***
+     * Test the approveRequest method
+     * Test that the method redirects to the request page when the user is not a faculty
+     */
     @Test
     void testStudentCannotApproveRequest() {
         Integer requestId = 1;
@@ -160,6 +198,10 @@ public class RequestControllerTest {
         verify(requestRepository, never()).save(any(Request.class));
     }
 
+    /***
+     * Test the rejectRequest method
+     * Test that the method rejects a request successfully
+     */
     @Test
     void testRejectRequest_success() {
         Integer requestId = 1;
@@ -175,6 +217,10 @@ public class RequestControllerTest {
         assertEquals("rejected", request.getStatus());
     }
 
+    /***
+     * Test the rejectRequest method
+     * Test that the method redirects to the request page when the request is not found
+     */
     @Test
     void testRejectRequest_requestNotFound() {
         Integer requestId = 1;
@@ -188,6 +234,10 @@ public class RequestControllerTest {
         verify(requestRepository, never()).save(any(Request.class));
     }
 
+    /***
+     * Test the rejectRequest method
+     * Test that the method redirects to the request page when the user is not a faculty
+     */
     @Test
     void testStudentCannotRejectRequest() {
         Integer requestId = 1;

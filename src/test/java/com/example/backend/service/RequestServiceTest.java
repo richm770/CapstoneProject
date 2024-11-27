@@ -14,12 +14,19 @@ import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/***
+ * This class is used to test the RequestService class
+ */
 @SpringBootTest
 class RequestServiceTest {
 
     @Autowired
     private RequestService requestService;
 
+    /***
+     * This method is used to test the validateLeaveRequestForm method
+     * when the start date is after the end date
+     */
     @Test
     void testValidateLeaveRequestForm_missingDates() {
         Model model = mock(Model.class);
@@ -32,6 +39,10 @@ class RequestServiceTest {
         verify(model).addAttribute("endDateError", "End date is required");
     }
 
+    /***
+     * This method is used to test the validateLeaveRequestForm method
+     * when the start date is after the end date
+     */
     @Test
     void testValidateLeaveRequestForm_noErrors() {
         Model model = mock(Model.class);
@@ -45,6 +56,10 @@ class RequestServiceTest {
         verify(model, never()).addAttribute(anyString(), anyString());
     }
 
+    /***
+     * This method is used to test the validateHousingRequestForm method
+     * when the fields are blank
+     */
     @Test
     void testValidateHousingRequestForm_blankFields() {
         Model model = mock(Model.class);
@@ -59,6 +74,10 @@ class RequestServiceTest {
         verify(model).addAttribute("durationError", "Duration is required");
     }
 
+    /***
+     * This method is used to test the validateHousingRequestForm method
+     * when there are no errors
+     */
     @Test
     void testValidateHousingRequestForm_noErrors() {
         Model model = mock(Model.class);
@@ -72,6 +91,10 @@ class RequestServiceTest {
         verify(model, never()).addAttribute(anyString(), anyString());
     }
 
+    /***
+     * This method is used to test the validateCourseRegistrationRequestForm method
+     * when the fields are missing
+     */
     @Test
     void testValidateCourseRegistrationRequestForm_missingFields() {
         Model model = mock(Model.class);
@@ -85,6 +108,10 @@ class RequestServiceTest {
         verify(model).addAttribute("semesterError", "Semester is required");
     }
 
+    /***
+     * This method is used to test the validateCourseRegistrationRequestForm method
+     * when there are no errors
+     */
     @Test
     void testValidateCourseRegistrationRequestForm_noErrors() {
         Model model = mock(Model.class);
