@@ -53,8 +53,8 @@ jobs:
             DB_PASSWORD=$(echo $SECRET | jq -r '.password')
             DB_URL=jdbc:postgresql://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
 
-            MAIL_SENDER_USERNAME=${{ secrets.MAIL_SENDER_USERNAME }}
-            MAIL_SENDER_PASSWORD=${{ secrets.MAIL_SENDER_PASSWORD }}
+            MAIL_SENDER_USERNAME='${{ secrets.MAIL_SENDER_USERNAME }}'
+            MAIL_SENDER_PASSWORD='${{ secrets.MAIL_SENDER_PASSWORD }}'
   
             # Stop and remove the existing Docker container
             echo "Stopping and removing existing Docker container..."
