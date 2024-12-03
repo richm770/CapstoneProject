@@ -4,6 +4,7 @@ import com.example.backend.model.*;
 import com.example.backend.repository.CommentRepository;
 import com.example.backend.repository.RequestRepository;
 import com.example.backend.service.AuthService;
+import com.example.backend.service.EmailService;
 import com.example.backend.service.RequestService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ public class RequestController {
     private final RequestRepository requestRepository;
     private final RequestService requestService;
     private final CommentRepository commentRepository;
+    private final EmailService emailService;
 
     /***
      * Constructor for the request controller
@@ -29,11 +31,15 @@ public class RequestController {
      * @param requestService The request service
      * @param commentRepository The comment repository
      */
-    public RequestController(AuthService authService, RequestRepository requestRepository, RequestService requestService, CommentRepository commentRepository) {
+    public RequestController(AuthService authService,
+                             RequestRepository requestRepository,
+                             RequestService requestService,
+                             CommentRepository commentRepository, EmailService emailService) {
         this.authService = authService;
         this.requestRepository = requestRepository;
         this.requestService = requestService;
         this.commentRepository = commentRepository;
+        this.emailService = emailService;
     }
 
     /***
@@ -121,6 +127,8 @@ public class RequestController {
         request.setStatus("withdrawn");
         requestRepository.save(request);
 
+        emailService.sendRequestStatusChangeToStudent(request);
+
         return "redirect:/request/" + requestId;
     }
 
@@ -151,6 +159,8 @@ public class RequestController {
         request.setStatus("approved");
         requestRepository.save(request);
 
+        emailService.sendRequestStatusChangeToStudent(request);
+
         return "redirect:/request/" + requestId;
     }
 
@@ -180,6 +190,8 @@ public class RequestController {
 
         request.setStatus("rejected");
         requestRepository.save(request);
+
+        emailService.sendRequestStatusChangeToStudent(request);
 
         return "redirect:/request/" + requestId;
     }
@@ -237,6 +249,9 @@ public class RequestController {
 
         requestRepository.save(leaveOfAbsenceRequest);
 
+        emailService.sendRequestCreationConfirmationEmail(leaveOfAbsenceRequest, user.getEmail());
+        emailService.sendRequestCreationEmailToFaculty(leaveOfAbsenceRequest, user);
+
         return "redirect:/dashboard";
     }
 
@@ -293,6 +308,9 @@ public class RequestController {
 
         requestRepository.save(studentHousingRequest);
 
+        emailService.sendRequestCreationConfirmationEmail(studentHousingRequest, user.getEmail());
+        emailService.sendRequestCreationEmailToFaculty(studentHousingRequest, user);
+
         return "redirect:/dashboard";
     }
 
@@ -348,6 +366,9 @@ public class RequestController {
         courseRegistrationRequest.setType("course_registration");
 
         requestRepository.save(courseRegistrationRequest);
+
+        emailService.sendRequestCreationConfirmationEmail(courseRegistrationRequest, user.getEmail());
+        emailService.sendRequestCreationEmailToFaculty(courseRegistrationRequest, user);
 
         return "redirect:/dashboard";
     }

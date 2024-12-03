@@ -39,7 +39,7 @@ public class AuthService {
      */
     public void registerStudent(StudentSignupRequest signupRequest) {
         Student student = new Student();
-        student.setEmail(signupRequest.getEmail());
+        student.setEmail(signupRequest.getEmail().toLowerCase());
         student.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         student.setFirstName(signupRequest.getFirstName());
         student.setLastName(signupRequest.getLastName());
@@ -63,7 +63,7 @@ public class AuthService {
      */
     public void registerFaculty(FacultySignupRequest signupRequest) {
         Faculty faculty = new Faculty();
-        faculty.setEmail(signupRequest.getEmail());
+        faculty.setEmail(signupRequest.getEmail().toLowerCase());
         faculty.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
         faculty.setFirstName(signupRequest.getFirstName());
         faculty.setLastName(signupRequest.getLastName());

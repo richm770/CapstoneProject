@@ -2,12 +2,17 @@ package com.example.backend.service;
 
 import com.example.backend.model.*;
 import com.example.backend.repository.RequestRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.mail.MailException;
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class RequestService {
 
