@@ -5,6 +5,12 @@ services:
     container_name: requestapprovalapp
     environment:
       - SPRING_PROFILES_ACTIVE=prod
+      - DB_ENDPOINT=${DB_ENDPOINT}
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MAIL_SENDER_USERNAME=${MAIL_SENDER_USERNAME}
+      - MAIL_SENDER_PASSWORD=${MAIL_SENDER_PASSWORD}
     ports:
       - "8080:8080"
     networks:
