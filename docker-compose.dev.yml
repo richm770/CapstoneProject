@@ -1,0 +1,17 @@
+name: request_approval_app_dev
+services:
+  dev-db:
+    image: postgres:latest
+    container_name: dev-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: requestapprovalsystem
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d
+
+volumes:
+  postgres_data:
