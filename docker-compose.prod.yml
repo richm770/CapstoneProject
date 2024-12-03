@@ -3,6 +3,8 @@ services:
   app:
     image: richm770/requestapprovalsystem:latest
     container_name: requestapprovalapp
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
     ports:
       - "8080:8080"
     networks:
