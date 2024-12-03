@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine-jdk as build
+FROM amazoncorretto:21-alpine-jdk AS build
 
 WORKDIR /app
 
