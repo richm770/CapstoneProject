@@ -49,12 +49,12 @@ jobs:
             # Fetch secrets from AWS Secrets Manager
             echo "Fetching RDS credentials from Secrets Manager..."
             SECRET=$(aws secretsmanager get-secret-value --secret-id ${{ secrets.DB_SECRETS_ID }} --query SecretString --output text)
-            DB_USERNAME=$(echo $SECRET | jq -r '.username')
-            DB_PASSWORD=$(echo $SECRET | jq -r '.password')
-            DB_URL=jdbc:postgresql://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
+            export DB_USERNAME=$(echo $SECRET | jq -r '.username')
+            export DB_PASSWORD=$(echo $SECRET | jq -r '.password')
+            export DB_URL=jdbc:postgresql://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
 
-            MAIL_SENDER_USERNAME='${{ secrets.MAIL_SENDER_USERNAME }}'
-            MAIL_SENDER_PASSWORD='${{ secrets.MAIL_SENDER_PASSWORD }}'
+            export MAIL_SENDER_USERNAME='${{ secrets.MAIL_SENDER_USERNAME }}'
+            export MAIL_SENDER_PASSWORD='${{ secrets.MAIL_SENDER_PASSWORD }}'
   
             # Stop and remove the existing Docker container
             echo "Stopping and removing existing Docker container..."
