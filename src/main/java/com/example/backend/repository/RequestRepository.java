@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface RequestRepository extends JpaRepository<Request, Integer> {
 
-    public List<Request> findAllByCreatedByEmailAndType(String createdBy, String type);
+    List<Request> findAllByCreatedByEmailAndType(String createdBy, String type);
 
-    public List<Request> findAllByApprovedByEmailOrAssignedDepartmentAndStatusIsNot(String approvedByEmail, Department assignedDepartment, String status);
+    List<Request> findAllByApprovedByEmailOrAssignedDepartmentAndStatusIsNot(String approvedByEmail, Department assignedDepartment, String status);
 
-    public Request getRequestById(Integer requestId);
+    Request getRequestById(Integer requestId);
 }
