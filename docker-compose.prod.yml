@@ -5,7 +5,7 @@ services:
     container_name: requestapprovalapp
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_ENDPOINT}:5432/${DB_NAME}
+      - SPRING_DATASOURCE_URL=${DB_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - MAIL_SENDER_USERNAME=${MAIL_SENDER_USERNAME}
