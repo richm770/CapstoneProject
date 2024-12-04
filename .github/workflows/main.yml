@@ -55,6 +55,10 @@ jobs:
 
             export MAIL_SENDER_USERNAME='${{ secrets.MAIL_SENDER_USERNAME }}'
             export MAIL_SENDER_PASSWORD='${{ secrets.MAIL_SENDER_PASSWORD }}'
+
+            # Pull latest Docker images defined in Docker Compose file
+            echo "Pulling the latest Docker images..."
+            docker compose -f /home/ec2-user/deployment/docker-compose.prod.yml pull
   
             # Stop and remove the existing Docker container
             echo "Stopping and removing existing Docker container..."
