@@ -5,10 +5,9 @@ services:
     container_name: requestapprovalapp
     environment:
       - SPRING_PROFILES_ACTIVE=prod
-      - DB_ENDPOINT=${DB_ENDPOINT}
-      - DB_NAME=${DB_NAME}
-      - DB_USERNAME=${DB_USERNAME}
-      - DB_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_ENDPOINT}:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - MAIL_SENDER_USERNAME=${MAIL_SENDER_USERNAME}
       - MAIL_SENDER_PASSWORD=${MAIL_SENDER_PASSWORD}
     ports:
