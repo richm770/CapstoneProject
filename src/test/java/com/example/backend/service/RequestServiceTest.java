@@ -4,6 +4,9 @@ import com.example.backend.model.CourseRegistrationRequest;
 import com.example.backend.model.LeaveOfAbsenceRequest;
 import com.example.backend.model.StudentHousingRequest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.ui.Model;
@@ -17,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 /***
  * This class is used to test the RequestService class
  */
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class RequestServiceTest {
 
-    @Autowired
+    @InjectMocks
     private RequestService requestService;
 
     /***
