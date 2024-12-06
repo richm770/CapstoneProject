@@ -19,6 +19,7 @@ jobs:
 
       - name: Build with Maven
         run: |
+          chmod +x ./mvnw
           ./mvnw -B package --file pom.xml
 
   build_and_push_docker_image:
