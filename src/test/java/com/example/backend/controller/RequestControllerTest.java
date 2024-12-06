@@ -7,6 +7,7 @@ import com.example.backend.model.Student;
 import com.example.backend.repository.CommentRepository;
 import com.example.backend.repository.RequestRepository;
 import com.example.backend.service.AuthService;
+import com.example.backend.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,9 @@ public class RequestControllerTest {
 
     @Mock
     private AuthService authService;
+
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private RequestController requestController;
@@ -104,6 +108,7 @@ public class RequestControllerTest {
 
         when(authService.getUserByPrincipal(principal)).thenReturn(student);
         when(requestRepository.getRequestById(requestId)).thenReturn(request);
+        doNothing().when(emailService).sendRequestStatusChangeToStudent(request);
 
         String result = requestController.withdrawRequest(requestId, principal);
 
@@ -156,6 +161,7 @@ public class RequestControllerTest {
 
         when(authService.getUserByPrincipal(principal)).thenReturn(faculty);
         when(requestRepository.getRequestById(requestId)).thenReturn(request);
+        doNothing().when(emailService).sendRequestStatusChangeToStudent(request);
 
         String result = requestController.approveRequest(requestId, principal);
 
@@ -208,6 +214,7 @@ public class RequestControllerTest {
 
         when(authService.getUserByPrincipal(principal)).thenReturn(faculty);
         when(requestRepository.getRequestById(requestId)).thenReturn(request);
+        doNothing().when(emailService).sendRequestStatusChangeToStudent(request);
 
         String result = requestController.rejectRequest(requestId, principal);
 
