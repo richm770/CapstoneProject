@@ -2,15 +2,19 @@ package com.example.backend.service;
 
 import com.example.backend.model.*;
 import com.example.backend.repository.FacultyRepository;
+import com.example.backend.repository.PasswordResetTokenRepository;
 import com.example.backend.repository.StudentRepository;
 import com.example.backend.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.security.Principal;
-import java.util.Set;
+import java.util.*;
 
+@Slf4j
 @Service
 public class AuthService {
 
@@ -18,6 +22,11 @@ public class AuthService {
     private final FacultyRepository facultyRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final EmailService emailService;
+
+    private final Map<String, String> resetTokens = new HashMap<>();
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
+    private final PasswordResetTokenService passwordResetTokenService;
 
     /***
      * Constructor
@@ -26,11 +35,14 @@ public class AuthService {
      * @param passwordEncoder: PasswordEncoder object
      * @param userRepository: UserRepository object
      */
-    public AuthService(StudentRepository studentRepository, FacultyRepository facultyRepository, PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public AuthService(StudentRepository studentRepository, FacultyRepository facultyRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService, PasswordResetTokenRepository passwordResetTokenRepository, PasswordResetTokenService passwordResetTokenService) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.emailService = emailService;
+        this.passwordResetTokenRepository = passwordResetTokenRepository;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     /***
@@ -90,5 +102,26 @@ public class AuthService {
         String userEmail = principal.getName();
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
+    }
+
+    public void generateResetToken(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
+        String token = UUID.randomUUID().toString();
+
+        passwordResetTokenService.createPasswordResetTokenForUser(user, token);
+
+        String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        String resetLink = baseUrl + "/auth/reset-password?token=" + token;
+
+        emailService.sendResetPasswordEmail(user.getEmail(), resetLink);
+    }
+
+    public void updatePassword(String email, String newPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
     }
 }

@@ -33,8 +33,7 @@ public class WebSecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login", "/error", "/auth/student-signup", "/auth/faculty-signup").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/auth/**", "/error", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/request/leaveRequest", "/request/courseRegistrationRequest", "/request/housingRequest").hasAuthority("STUDENT")
                         .anyRequest().authenticated()
                 )

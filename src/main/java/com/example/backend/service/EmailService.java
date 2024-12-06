@@ -89,4 +89,18 @@ public class EmailService {
         }
     }
 
+    public void sendResetPasswordEmail(String userEmail, String resetLink) {
+        SimpleMailMessage passwordResetMessage = new SimpleMailMessage();
+
+        passwordResetMessage.setFrom("c11186907@gmail.com");
+        passwordResetMessage.setSubject("Password Reset Request");
+        passwordResetMessage.setTo(userEmail);
+        passwordResetMessage.setText("Click the link to reset your password: " + resetLink);
+
+        try {
+            this.mailSender.send(passwordResetMessage);
+        } catch (MailException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 }

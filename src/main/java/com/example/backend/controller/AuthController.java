@@ -1,15 +1,18 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.FacultySignupRequest;
-import com.example.backend.service.AuthService;
 import com.example.backend.model.StudentSignupRequest;
+import com.example.backend.service.AuthService;
+import com.example.backend.service.PasswordResetTokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
 @Controller
@@ -17,13 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
 
     private final AuthService authService;
+    private final PasswordResetTokenService passwordResetTokenService;
 
     /***
      * Constructor for auth controller
      * @param authService The auth service
      */
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, PasswordResetTokenService passwordResetTokenService) {
         this.authService = authService;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     /***
@@ -129,4 +134,60 @@ public class AuthController {
         return phone.matches(phoneRegex);
     }
 
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordPage(Model model) {
+        return "forgot-password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String forgotPassword(@RequestParam String email, RedirectAttributes redirectAttributes) {
+        try {
+            authService.generateResetToken(email);
+            redirectAttributes.addFlashAttribute("successMessage", "Password reset link has been sent to your email.");
+        } catch (UsernameNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Email address not found.");
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Password reset link has already been sent to your email.");
+        }
+        return "redirect:/auth/forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordPage(@RequestParam String token, Model model) {
+        String email = passwordResetTokenService.validateToken(token);
+
+        if (email == null) {
+            model.addAttribute("error", "Invalid or expired token.");
+            return "reset-password";
+        }
+
+        model.addAttribute("token", token);
+        return "reset-password";
+    }
+
+    @PostMapping("/reset-password")
+    public String resetPassword(@RequestParam String token,
+                                @RequestParam String newPassword,
+                                @RequestParam String confirmNewPassword,
+                                Model model, RedirectAttributes redirectAttributes) {
+
+        String email = passwordResetTokenService.validateToken(token);
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            model.addAttribute("passwordError", "Passwords must match.");
+            model.addAttribute("token", token);
+            return "reset-password";
+        }
+
+        if (email == null) {
+            model.addAttribute("error", "Invalid or expired token.");
+            return "reset-password";
+        }
+
+        authService.updatePassword(email, newPassword);
+        passwordResetTokenService.clearToken(token);
+
+        redirectAttributes.addFlashAttribute("success", "Password has been reset successfully.");
+        return "redirect:/auth/login";
+    }
 }
