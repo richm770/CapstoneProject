@@ -28,7 +28,7 @@ The Project Approval System is a web application that aims to enable better coll
 
 ## Accessing the Application
 
-To access the application you can naviagte to the following URL: [Project Approval System](http://3.210.197.214:8080/)
+To access the application you can naviagte to the following URL: [Project Approval System](http://3.210.197.214/)
 
 ## Useful Links
 
