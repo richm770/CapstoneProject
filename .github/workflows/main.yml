@@ -3,8 +3,6 @@ name: Deploy Request Approval System App to EC2
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
