@@ -20,7 +20,7 @@ jobs:
       - name: Build and Test with Maven
         run: |
           chmod +x ./mvnw
-          
+
           # Fetch secrets from AWS Secrets Manager
           echo "Fetching RDS credentials from Secrets Manager..."
           SECRET=$(aws secretsmanager get-secret-value --secret-id ${{ secrets.DB_SECRETS_ID }} --query SecretString --output text)
@@ -28,7 +28,7 @@ jobs:
           export SPRING_DATASOURCE_PASSWORD=$(echo $SECRET | jq -r '.password')
           export SPRING_DATASOURCE_URL=jdbc:postgresql://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
 
-          ./mvnw -B package --file pom.xml
+          ./mvnw -B -Dspring.profiles.active=test package --file pom.xml
 
   build_and_push_docker_image:
     runs-on: self-hosted
