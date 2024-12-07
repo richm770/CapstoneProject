@@ -28,6 +28,10 @@ jobs:
           export SPRING_DATASOURCE_PASSWORD=$(echo $SECRET | jq -r '.password')
           export SPRING_DATASOURCE_URL=jdbc:postgresql://${{ secrets.DB_ENDPOINT }}:5432/${{ secrets.DB_NAME }}
 
+          # Setting mail sender env variables for testing
+          export MAIL_SENDER_USERNAME='${{ secrets.MAIL_SENDER_USERNAME }}'
+          export MAIL_SENDER_PASSWORD='${{ secrets.MAIL_SENDER_PASSWORD }}'
+
           ./mvnw -B -Dspring.profiles.active=test package --file pom.xml
 
   build_and_push_docker_image:
