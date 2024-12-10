@@ -16,11 +16,23 @@ public class PasswordResetTokenService {
         this.passwordResetTokenRepository = passwordResetTokenRepository;
     }
 
+    /**
+     * Create a password reset token for a user from a generated token
+     *
+     * @param user  The user who is resetting their password
+     * @param token The randomly generated token
+     */
     public void createPasswordResetTokenForUser(User user, String token) {
         PasswordResetToken passwordResetToken = new PasswordResetToken(token, user);
         passwordResetTokenRepository.save(passwordResetToken);
     }
 
+    /**
+     * Validate a password reset token
+     *
+     * @param token The password reset token to be validated
+     * @return The email of the user who is attached to the token
+     */
     public String validateToken(String token) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
         if (resetToken == null) {
@@ -36,6 +48,11 @@ public class PasswordResetTokenService {
         return resetToken.getUser().getEmail();
     }
 
+    /**
+     * Clears a password reset token from the database
+     *
+     * @param token Password reset token to be cleared
+     */
     public void clearToken(String token) {
         PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token);
 

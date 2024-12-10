@@ -29,9 +29,10 @@ public class EmailService {
     }
 
     /**
+     * This method will send a confirmation email to the request creator when it is created
      *
-     * @param request
-     * @param userEmail
+     * @param request   The request that was created
+     * @param userEmail The email of the user who created the request
      */
     public void sendRequestCreationConfirmationEmail(Request request, String userEmail) {
         SimpleMailMessage confirmationMsg = new SimpleMailMessage(this.templateMessage);
@@ -46,9 +47,11 @@ public class EmailService {
     }
 
     /**
+     * This method sends an email to the faculty member who is part of the department of which the request is attached
+     * to when the request is created
      *
-     * @param request
-     * @param requestCreator
+     * @param request        The request that was created
+     * @param requestCreator The user who created the request
      */
     public void sendRequestCreationEmailToFaculty(Request request, User requestCreator) {
 
@@ -73,6 +76,7 @@ public class EmailService {
 
     /**
      * Send a request status change email to the request's creator
+     *
      * @param request The request that changed status
      */
     public void sendRequestStatusChangeToStudent(Request request) {
@@ -89,6 +93,12 @@ public class EmailService {
         }
     }
 
+    /**
+     * This method sends a reset password link to the user who requested it
+     *
+     * @param userEmail The email of the user who requested to change their password
+     * @param resetLink The link that the user will click to reset their password
+     */
     public void sendResetPasswordEmail(String userEmail, String resetLink) {
         SimpleMailMessage passwordResetMessage = new SimpleMailMessage();
 
@@ -99,6 +109,27 @@ public class EmailService {
 
         try {
             this.mailSender.send(passwordResetMessage);
+        } catch (MailException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * This method will email the user who requested to change their password after the password has been
+     * successfully changed.
+     *
+     * @param userEmail The user who requested to change their password
+     */
+    public void sendPasswordChangeConfirmationEmail(String userEmail) {
+        SimpleMailMessage passwordChangeConfirmationMessage = new SimpleMailMessage();
+
+        passwordChangeConfirmationMessage.setFrom("c11186907@gmail.com");
+        passwordChangeConfirmationMessage.setSubject("Password Changed Successfully");
+        passwordChangeConfirmationMessage.setTo(userEmail);
+        passwordChangeConfirmationMessage.setText("Your password was successfully changed. If you did not request this change, please contact administration.");
+
+        try {
+            this.mailSender.send(passwordChangeConfirmationMessage);
         } catch (MailException e) {
             log.error(e.getMessage(), e);
         }

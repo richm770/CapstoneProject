@@ -6,8 +6,6 @@ import com.example.backend.service.AuthService;
 import com.example.backend.service.PasswordResetTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +20,9 @@ public class AuthController {
     private final AuthService authService;
     private final PasswordResetTokenService passwordResetTokenService;
 
-    /***
+    /**
      * Constructor for auth controller
+     *
      * @param authService The auth service
      */
     public AuthController(AuthService authService, PasswordResetTokenService passwordResetTokenService) {
@@ -31,8 +30,9 @@ public class AuthController {
         this.passwordResetTokenService = passwordResetTokenService;
     }
 
-    /***
+    /**
      * Expose the login page
+     *
      * @return The login page
      */
     @GetMapping("/login")
@@ -40,8 +40,9 @@ public class AuthController {
         return "login";
     }
 
-    /***
+    /**
      * Expose the student signup page
+     *
      * @param model The model
      * @return The student signup page
      */
@@ -51,10 +52,11 @@ public class AuthController {
         return "student-signup";
     }
 
-    /***
+    /**
      * Process the student signup form
+     *
      * @param signupRequest The signup request
-     * @param model The model
+     * @param model         The model
      * @return The redirect to the dashboard
      */
     @PostMapping("/student-signup")
@@ -67,7 +69,7 @@ public class AuthController {
             return "student-signup";
         }
         // Validate that phone number is 10 digits long
-        if (!isValidPhoneNumber(signupRequest.getPhone())) {
+        if (!authService.isValidPhoneNumber(signupRequest.getPhone())) {
             model.addAttribute("error", "Invalid phone number");
             model.addAttribute("signupRequest", signupRequest);
             return "student-signup";
@@ -82,8 +84,9 @@ public class AuthController {
         return "redirect:/dashboard";
     }
 
-    /***
+    /**
      * Expose the faculty signup page
+     *
      * @param model The model
      * @return The faculty signup page
      */
@@ -93,10 +96,11 @@ public class AuthController {
         return "faculty-signup";
     }
 
-    /***
+    /**
      * Process the faculty signup form
+     *
      * @param signupRequest The signup request
-     * @param model The model
+     * @param model         The model
      * @return The redirect to the dashboard
      */
     @PostMapping("/faculty-signup")
@@ -109,7 +113,7 @@ public class AuthController {
             return "faculty-signup";
         }
         // Validate that phone number is 10 digits long
-        if (!isValidPhoneNumber(signupRequest.getPhone())) {
+        if (!authService.isValidPhoneNumber(signupRequest.getPhone())) {
             model.addAttribute("error", "Invalid phone number");
             model.addAttribute("signupRequest", signupRequest);
             return "student-signup";
@@ -122,16 +126,6 @@ public class AuthController {
         }
         authService.registerFaculty(signupRequest);
         return "redirect:/dashboard";
-    }
-
-    /***
-     * Validates that the phone number is 10 digits long
-     * @param phone The phone number to validate
-     * @return true if the phone number is valid, false otherwise
-     */
-    private boolean isValidPhoneNumber(String phone) {
-        String phoneRegex = "^[0-9]{10}$";
-        return phone.matches(phoneRegex);
     }
 
     @GetMapping("/forgot-password")

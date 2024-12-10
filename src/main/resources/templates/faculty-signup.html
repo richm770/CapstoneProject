@@ -1,132 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="layouts/main-layout :: common_header(~{::title}, _)">
     <meta charset="UTF-8">
     <title>Faculty Sign Up</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        .signup-container {
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 0px;
-        }
-        .signup-form {
-            background-color: #ffffff;
-            padding: 20px;
-            padding-right: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin-bottom: 20px;
-        }
-        label {
-            margin-bottom: 5px;
-        }
-        input[type="text"],
-        input[type="password"],
-        input[type="submit"],
-        input[type="email"],
-        input[type="tel"],
-        select {
-            width: calc(100% - 20px);
-            padding: 8px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-            width: 50%
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .error-message {
-            color: red;
-            margin-bottom: 20px;
-        }
-        hr {
-            width: 50%;
-        }
-        .login-link {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .login-link a {
-            text-decoration: none;
-            color: #007bff;
-            cursor: pointer;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
-<body>
-<div class="signup-container">
-    <h1>Project Approval System - Faculty Signup</h1>
-    <hr>
-    <div th:if="${error}" class="error-message">
-        <p th:text="${error}"></p>
+<body class="d-flex align-items-center justify-content-center vh-100 bg-light">
+<div class="container text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h1 class="mb-3">Project Approval System - Faculty Signup</h1>
+            <hr class="mb-4">
+            <div th:if="${error}" class="alert alert-danger" role="alert">
+                <p th:text="${error}"></p>
+            </div>
+            <form th:action="@{/auth/faculty-signup}" method="post" class="bg-white p-4 shadow rounded">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" name="firstName" id="firstName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" name="lastName" id="lastName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="tel" name="phone" id="phone" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="department" class="form-label">Department</label>
+                    <select name="department" id="department" class="form-select" required>
+                        <option value="" disabled selected>Select Department</option>
+                        <option th:each="department : ${T(com.example.backend.model.Department).values()}"
+                                th:value="${department}" th:text="${department}">Department</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+            </form>
+            <div class="mt-3">
+                <a th:href="@{/auth/login}" class="d-block">Already have an account? Log in</a>
+            </div>
+        </div>
     </div>
-    <form th:action="@{/auth/faculty-signup}" method="post" class="signup-form">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" required/>
-        </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" required/>
-        </div>
-        <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" name="confirmPassword" id="confirmPassword" required/>
-        </div>
-        <div class="form-group">
-            <label for="firstName">First Name</label>
-            <input type="text" name="firstName" id="firstName" required/>
-        </div>
-        <div class="form-group">
-            <label for="lastName">Last Name</label>
-            <input type="text" name="lastName" id="lastName" required/>
-        </div>
-        <div class="form-group">
-            <label for="phone">Phone</label>
-            <input type="tel" name="phone" id="phone" required/>
-        </div>
-        <div class="form-group">
-            <label for="department">Department</label>
-            <select name="department" id="department" required>
-                <option value="" disabled selected>Select Department</option>
-                <option th:each="department : ${T(com.example.backend.model.Department).values()}"
-                        th:value="${department}" th:text="${department}">Department</option>
-            </select>
-        </div>
-        <div class="form-group" style="align-items: center">
-            <input type="submit" value="Sign Up"/>
-        </div>
-        <div class="login-link">
-            <a th:href="@{/auth/login}">Already have an account? Log in</a>
-        </div>
-    </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 </body>
 </html>

@@ -24,11 +24,12 @@ public class RequestController {
     private final CommentRepository commentRepository;
     private final EmailService emailService;
 
-    /***
+    /**
      * Constructor for the request controller
-     * @param authService The auth service
+     *
+     * @param authService       The auth service
      * @param requestRepository The request repository
-     * @param requestService The request service
+     * @param requestService    The request service
      * @param commentRepository The comment repository
      */
     public RequestController(AuthService authService,
@@ -42,21 +43,23 @@ public class RequestController {
         this.emailService = emailService;
     }
 
-    /***
+    /**
      * Add the user to the model
+     *
      * @param principal The principal
-     * @param model The model
+     * @param model     The model
      */
     private void addUserToModel(Principal principal, Model model) {
         User user = authService.getUserByPrincipal(principal);
         model.addAttribute("user", user);
     }
 
-    /***
+    /**
      * Expose the request page
+     *
      * @param requestId The request ID
      * @param principal The principal
-     * @param model The model
+     * @param model     The model
      * @return The request page
      */
     @GetMapping("/{requestId}")
@@ -72,11 +75,12 @@ public class RequestController {
         return "request-page";
     }
 
-    /***
+    /**
      * Create a new comment
+     *
      * @param requestId The request ID
      * @param principal The principal
-     * @param comment The comment
+     * @param comment   The comment
      * @return The redirect to the request page
      */
     @PostMapping("/comment")
@@ -100,8 +104,9 @@ public class RequestController {
         return "redirect:/request/" + requestId;
     }
 
-    /***
+    /**
      * Withdraw a request
+     *
      * @param requestId The request ID
      * @param principal The principal
      * @return The redirect to the request page
@@ -132,8 +137,9 @@ public class RequestController {
         return "redirect:/request/" + requestId;
     }
 
-    /***
+    /**
      * Approve a request
+     *
      * @param requestId The request ID
      * @param principal The principal
      * @return The redirect to the request page
@@ -164,8 +170,9 @@ public class RequestController {
         return "redirect:/request/" + requestId;
     }
 
-    /***
+    /**
      * Reject a request
+     *
      * @param requestId The request ID
      * @param principal The principal
      * @return The redirect to the request page
@@ -196,10 +203,11 @@ public class RequestController {
         return "redirect:/request/" + requestId;
     }
 
-    /***
+    /**
      * Close a request
+     *
      * @param principal The principal
-     * @param model The request ID
+     * @param model     The request ID
      * @return The redirect to the request page
      */
     @GetMapping("/leaveRequest")
@@ -212,11 +220,12 @@ public class RequestController {
         return "leave-request-form";
     }
 
-    /***
+    /**
      * Create a leave request
-     * @param principal The principal
+     *
+     * @param principal             The principal
      * @param leaveOfAbsenceRequest The leave of absence request
-     * @param model The model
+     * @param model                 The model
      * @return The redirect to the dashboard
      */
     @PostMapping("/leaveRequest")
@@ -255,10 +264,11 @@ public class RequestController {
         return "redirect:/dashboard";
     }
 
-    /***
+    /**
      * Expose the housing request form
+     *
      * @param principal The principal
-     * @param model The model
+     * @param model     The model
      * @return The housing request form
      */
     @GetMapping("/housingRequest")
@@ -271,11 +281,12 @@ public class RequestController {
         return "housing-request-form";
     }
 
-    /***
+    /**
      * Create a housing request
-     * @param principal The principal
+     *
+     * @param principal             The principal
      * @param studentHousingRequest The student housing request
-     * @param model The model
+     * @param model                 The model
      * @return The redirect to the dashboard
      */
     @PostMapping("/housingRequest")
@@ -314,10 +325,11 @@ public class RequestController {
         return "redirect:/dashboard";
     }
 
-    /***
+    /**
      * Expose the course registration request form
+     *
      * @param principal The principal
-     * @param model The model
+     * @param model     The model
      * @return The course registration request form
      */
     @GetMapping("/courseRegistrationRequest")
@@ -330,11 +342,12 @@ public class RequestController {
         return "course-registration-request-form";
     }
 
-    /***
+    /**
      * Create a course registration request
-     * @param principal The principal
+     *
+     * @param principal                 The principal
      * @param courseRegistrationRequest The course registration request
-     * @param model The model
+     * @param model                     The model
      * @return The redirect to the dashboard
      */
     @PostMapping("/courseRegistrationRequest")

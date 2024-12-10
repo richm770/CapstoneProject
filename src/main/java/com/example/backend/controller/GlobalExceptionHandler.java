@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles uncaught exceptions throughout the application and displays them to the user through an error page
+     *
+     * @param ex    The caught exception
+     * @param model The UI model
+     * @return The error page template
+     */
     @ExceptionHandler(Exception.class)
     public String handleException(Exception ex, Model model) {
         log.error(ex.getMessage(), ex);

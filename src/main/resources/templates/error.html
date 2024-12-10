@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head th:replace="layouts/main-layout :: common_header(~{::title}, _)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/error.css">
@@ -13,7 +13,7 @@
     <div class="error-details">
         <p><strong>Error Message:</strong> <span th:text="${message}">Unknown error</span></p>
     </div>
-    <a href="/static">Go Back to Home</a>
+    <a href="/">Go Back to Home</a>
 </div>
 </body>
 </html>

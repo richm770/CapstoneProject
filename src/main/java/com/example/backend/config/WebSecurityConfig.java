@@ -8,13 +8,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-/***
+/**
  * The web security configuration class
  * This class configures the security settings for the application
  */
@@ -22,8 +20,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-    /***
+    /**
      * The filter chain for the security configuration
+     *
      * @param http The http security
      * @return The security filter chain
      * @throws Exception If an exception occurs
@@ -54,8 +53,9 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-    /***
+    /**
      * The custom user details service
+     *
      * @param userRepository The user repository
      * @return The custom user details service
      */
@@ -64,8 +64,9 @@ public class WebSecurityConfig {
         return new CustomUserDetailsService(userRepository);
     }
 
-    /***
+    /**
      * The password encoder
+     *
      * @return The password encoder
      */
     @Bean
