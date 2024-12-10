@@ -13,8 +13,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    /***
+    /**
      * This method is used to load the user by username.
+     *
      * @param username name of user
      * @return UserDetails
      * @throws UsernameNotFoundException if user not found

@@ -18,16 +18,18 @@ public class RequestService {
 
     private final RequestRepository requestRepository;
 
-    /***
+    /**
      * Constructor for RequestService
+     *
      * @param requestRepository RequestRepository
      */
     public RequestService(RequestRepository requestRepository) {
         this.requestRepository = requestRepository;
     }
 
-    /***
+    /**
      * Method to get all requests
+     *
      * @return List of Request
      */
     public List<LeaveOfAbsenceRequest> getLeaveOfAbsenceRequests(String userEmail) {
@@ -37,8 +39,9 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Method to get all course registration requests
+     *
      * @return List of CourseRegistrationRequest
      */
     public List<CourseRegistrationRequest> getCourseRegistrationRequests(String userEmail) {
@@ -48,8 +51,9 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Method to get all student housing requests
+     *
      * @return List of StudentHousingRequest
      */
     public List<StudentHousingRequest> getStudentHousingRequests(String userEmail) {
@@ -59,16 +63,18 @@ public class RequestService {
                 .collect(Collectors.toList());
     }
 
-    /***
+    /**
      * Method to get all faculty requests
+     *
      * @return List of Request
      */
     public List<Request> getFacultyRequests(String facultyEmail, Department assignedDepartment) {
         return requestRepository.findAllByApprovedByEmailOrAssignedDepartmentAndStatusIsNot(facultyEmail, assignedDepartment, "withdrawn");
     }
 
-    /***
+    /**
      * Method to get all faculty requests
+     *
      * @return List of Request
      */
     public boolean validateLeaveRequestForm(Model model, LeaveOfAbsenceRequest leaveOfAbsenceRequest) {
@@ -89,9 +95,10 @@ public class RequestService {
         return hasErrors;
     }
 
-    /***
+    /**
      * Method to validate housing request form
-     * @param model Model
+     *
+     * @param model                 Model
      * @param studentHousingRequest StudentHousingRequest
      * @return boolean
      */
@@ -113,9 +120,10 @@ public class RequestService {
         return hasErrors;
     }
 
-    /***
+    /**
      * Method to validate course registration request form
-     * @param model Model
+     *
+     * @param model                     Model
      * @param courseRegistrationRequest CourseRegistrationRequest
      * @return boolean
      */

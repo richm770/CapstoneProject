@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{layouts/main-layout :: common_header(~{::title}, ~{})}">
+    <title>Profile</title>
+</head>
+<body th:replace="~{layouts/main-layout :: common_body(~{::mainContent}, _, _)}">
+<div th:fragment="mainContent">
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3>Update Profile</h3>
+            </div>
+            <div class="card-body">
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/user/update-student-profile}" th:method="post" th:object="${user}"
+                      th:if="${user instanceof T(com.example.backend.model.Student)}">
+                    <div class="mb-3">
+                        <label for="studentFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="studentFirstName" th:field="*{firstName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="studentLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="studentLastName" th:field="*{lastName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="studentPhoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="studentPhoneNumber" th:field="*{phone}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="studentId" class="form-label">Student ID</label>
+                        <input type="text" class="form-control" id="studentId" th:field="*{studentID}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Student Profile</button>
+                </form>
+
+                <form th:action="@{/user/update-faculty-profile}" th:method="post" th:object="${user}"
+                      th:if="${user instanceof T(com.example.backend.model.Faculty)}">
+                    <div class="mb-3">
+                        <label for="facultyFirstName" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="facultyFirstName" th:field="*{firstName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="facultyLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="facultyLastName" th:field="*{lastName}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="facultyPhoneNumber" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="facultyPhoneNumber" th:field="*{phone}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Department</label>
+                        <select class="form-select" id="department" th:field="*{department}" required>
+                            <option value="">Select Department</option>
+                            <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}"></option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Faculty Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

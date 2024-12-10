@@ -2,7 +2,6 @@ package com.example.backend.service;
 
 import com.example.backend.model.*;
 import com.example.backend.repository.FacultyRepository;
-import com.example.backend.repository.PasswordResetTokenRepository;
 import com.example.backend.repository.StudentRepository;
 import com.example.backend.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.security.Principal;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -24,29 +24,28 @@ public class AuthService {
     private final UserRepository userRepository;
     private final EmailService emailService;
 
-    private final Map<String, String> resetTokens = new HashMap<>();
-    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordResetTokenService passwordResetTokenService;
 
-    /***
+    /**
      * Constructor
+     *
      * @param studentRepository: StudentRepository object
      * @param facultyRepository: FacultyRepository object
-     * @param passwordEncoder: PasswordEncoder object
-     * @param userRepository: UserRepository object
+     * @param passwordEncoder:   PasswordEncoder object
+     * @param userRepository:    UserRepository object
      */
-    public AuthService(StudentRepository studentRepository, FacultyRepository facultyRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService, PasswordResetTokenRepository passwordResetTokenRepository, PasswordResetTokenService passwordResetTokenService) {
+    public AuthService(StudentRepository studentRepository, FacultyRepository facultyRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService, PasswordResetTokenService passwordResetTokenService) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.emailService = emailService;
-        this.passwordResetTokenRepository = passwordResetTokenRepository;
         this.passwordResetTokenService = passwordResetTokenService;
     }
 
-    /***
+    /**
      * This method is used to register a student
+     *
      * @param signupRequest: StudentSignupRequest object
      */
     public void registerStudent(StudentSignupRequest signupRequest) {
@@ -69,8 +68,9 @@ public class AuthService {
         studentRepository.save(student);
     }
 
-    /***
+    /**
      * This method is used to register a faculty
+     *
      * @param signupRequest: FacultySignupRequest object
      */
     public void registerFaculty(FacultySignupRequest signupRequest) {
@@ -93,8 +93,20 @@ public class AuthService {
         facultyRepository.save(faculty);
     }
 
-    /***
+    /**
+     * Validates that the phone number is 10 digits long
+     *
+     * @param phone The phone number to validate
+     * @return true if the phone number is valid, false otherwise
+     */
+    public boolean isValidPhoneNumber(String phone) {
+        String phoneRegex = "^[0-9]{10}$";
+        return phone.matches(phoneRegex);
+    }
+
+    /**
      * This method is used to get the user by principal
+     *
      * @param principal: Principal object
      * @return User object
      */
@@ -104,6 +116,11 @@ public class AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + userEmail));
     }
 
+    /**
+     * This method is used to generate a reset token to store in the database for a user to reset their password.
+     *
+     * @param email The email of the user that is resetting their password
+     */
     public void generateResetToken(String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
         String token = UUID.randomUUID().toString();
@@ -116,6 +133,12 @@ public class AuthService {
         emailService.sendResetPasswordEmail(user.getEmail(), resetLink);
     }
 
+    /**
+     * This method is used to update the password in the database of the user who requested to reset their password
+     *
+     * @param email       Email of the user who is updating their password
+     * @param newPassword The new password to store in the database
+     */
     public void updatePassword(String email, String newPassword) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " not found"));
@@ -123,5 +146,7 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepository.save(user);
+
+        emailService.sendPasswordChangeConfirmationEmail(user.getEmail());
     }
 }

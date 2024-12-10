@@ -22,8 +22,9 @@ public class DashboardController {
     private final UserRepository userRepository;
     private final RequestService requestService;
 
-    /***
+    /**
      * Constructor for the dashboard controller
+     *
      * @param userRepository The user repository
      * @param requestService The request service
      */
@@ -32,10 +33,11 @@ public class DashboardController {
         this.requestService = requestService;
     }
 
-    /***
+    /**
      * Expose the dashboard page
+     *
      * @param principal The principal
-     * @param model The model
+     * @param model     The model
      * @return The dashboard page
      */
     @GetMapping
