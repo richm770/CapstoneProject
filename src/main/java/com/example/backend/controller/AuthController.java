@@ -69,7 +69,7 @@ public class AuthController {
             return "student-signup";
         }
         // Validate that phone number is 10 digits long
-        if (!authService.isValidPhoneNumber(signupRequest.getPhone())) {
+        if (!isValidPhoneNumber(signupRequest.getPhone())) {
             model.addAttribute("error", "Invalid phone number");
             model.addAttribute("signupRequest", signupRequest);
             return "student-signup";
@@ -113,7 +113,7 @@ public class AuthController {
             return "faculty-signup";
         }
         // Validate that phone number is 10 digits long
-        if (!authService.isValidPhoneNumber(signupRequest.getPhone())) {
+        if (!isValidPhoneNumber(signupRequest.getPhone())) {
             model.addAttribute("error", "Invalid phone number");
             model.addAttribute("signupRequest", signupRequest);
             return "student-signup";
@@ -126,6 +126,17 @@ public class AuthController {
         }
         authService.registerFaculty(signupRequest);
         return "redirect:/dashboard";
+    }
+
+    /**
+     * Validates that the phone number is 10 digits long
+     *
+     * @param phone The phone number to validate
+     * @return true if the phone number is valid, false otherwise
+     */
+    public boolean isValidPhoneNumber(String phone) {
+        String phoneRegex = "^[0-9]{10}$";
+        return phone.matches(phoneRegex);
     }
 
     @GetMapping("/forgot-password")

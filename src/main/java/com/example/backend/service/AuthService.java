@@ -94,17 +94,6 @@ public class AuthService {
     }
 
     /**
-     * Validates that the phone number is 10 digits long
-     *
-     * @param phone The phone number to validate
-     * @return true if the phone number is valid, false otherwise
-     */
-    public boolean isValidPhoneNumber(String phone) {
-        String phoneRegex = "^[0-9]{10}$";
-        return phone.matches(phoneRegex);
-    }
-
-    /**
      * This method is used to get the user by principal
      *
      * @param principal: Principal object

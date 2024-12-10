@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.controller.AuthController;
 import com.example.backend.model.Faculty;
 import com.example.backend.model.Student;
 import com.example.backend.model.User;
@@ -17,11 +18,13 @@ public class UserService {
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
     private final AuthService authService;
+    private final AuthController authController;
 
-    public UserService(StudentRepository studentRepository, FacultyRepository facultyRepository, AuthService authService) {
+    public UserService(StudentRepository studentRepository, FacultyRepository facultyRepository, AuthService authService, AuthController authController) {
         this.studentRepository = studentRepository;
         this.facultyRepository = facultyRepository;
         this.authService = authService;
+        this.authController = authController;
     }
 
     /**
@@ -38,7 +41,7 @@ public class UserService {
         }
 
         // Validate that phone number is 10 digits long
-        if (!authService.isValidPhoneNumber(updatedStudent.getPhone())) {
+        if (!authController.isValidPhoneNumber(updatedStudent.getPhone())) {
             throw new IllegalArgumentException("Phone number must be 10 digits long.");
         }
 
@@ -64,7 +67,7 @@ public class UserService {
         }
 
         // Validate that phone number is 10 digits long
-        if (!authService.isValidPhoneNumber(updatedFaculty.getPhone())) {
+        if (!authController.isValidPhoneNumber(updatedFaculty.getPhone())) {
             throw new IllegalArgumentException("Phone number must be 10 digits long.");
         }
 
